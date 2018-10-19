@@ -1,0 +1,4 @@
+[submodule "app/src/main/cpp/emilib"]
+	path = app/src/main/cpp/emilib
+	url = https://github.com/lscooperlee/emilib.git
+	branch = master
