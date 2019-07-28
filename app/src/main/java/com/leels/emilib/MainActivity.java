@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "EMIMSG";
     HashMap<Integer, EmiMsg> msgMap = null;
 
     @Override
@@ -19,29 +20,47 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        msgMap = new HashMap<>();
+        if (msgMap == null) {
+            msgMap = new HashMap<Integer, EmiMsg>();
+            msgMap.put(R.id.button1, new EmiMsg("192.168.1.250", 1, 1, null, 0));
+            msgMap.put(R.id.button2, new EmiMsg("192.168.1.250", 1, 2, null, 0));
 
-        Button bt1 = (Button) findViewById(R.id.button1);
+            msgMap.put(R.id.button3, new EmiMsg("192.168.1.251", 1, 1, null, 0));
+            msgMap.put(R.id.button4, new EmiMsg("192.168.1.251", 1, 2, null, 0));
 
-        bt1.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Intent intent;
-                intent = new Intent(MainActivity.this, ConfigActivity.class);
-                startActivityForResult(intent, 0);
+            msgMap.put(R.id.button5, new EmiMsg("192.168.1.252", 1, 1, null, 0));
+            msgMap.put(R.id.button6, new EmiMsg("192.168.1.252", 1, 2, null, 0));
+        }
 
-                return false;
-            }
-        });
+        for(HashMap.Entry<Integer, EmiMsg> entry: msgMap.entrySet()) {
 
-        bt1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EmiMsg msg = new EmiMsg("127.0.0.1", 1, 2, null, 0);
-                int ret = msg.send();
-                Log.d("ttt", "onClick: " + Integer.toString(ret));
-            }
-        });
+            final int id = entry.getKey();
+
+            Button bt = (Button) findViewById(id);
+
+            bt.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Intent intent;
+                    intent = new Intent(MainActivity.this, ConfigActivity.class);
+                    intent.putExtra("id", id);
+                    startActivityForResult(intent, 0);
+
+                    return false;
+                }
+            });
+
+            bt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EmiMsg msg = msgMap.get(id);
+                    int ret = msg.send();
+                    Log.d(TAG, "MSG: "+msg.addr + ": " +Integer.toString(msg.msg) + ": "+Integer.toString(msg.cmd));
+                    Log.d(TAG, "SEND: "+Integer.toString(ret));
+                }
+            });
+
+        }
     }
 
     @Override
@@ -55,6 +74,13 @@ public class MainActivity extends AppCompatActivity {
                 int cmd = Integer.parseInt(data.getStringExtra("cmd"));
 
                 EmiMsg msg = new EmiMsg(addr, msgnum, cmd, null, 0);
+                int id = data.getIntExtra("id", 0);
+
+                Log.d(TAG, "onActivityResult: "+Integer.toString(id));
+                Log.d(TAG, "MSG save: "+msg.addr + ": " +Integer.toString(msg.msg) + ": "+Integer.toString(msg.cmd));
+
+                msgMap.put(id, msg);
+
             }
         }
     }

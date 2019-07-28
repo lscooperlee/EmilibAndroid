@@ -28,6 +28,9 @@ public class ConfigActivity extends AppCompatActivity {
                 returnIntent.putExtra("addr",addr);
                 returnIntent.putExtra("msg",msg);
                 returnIntent.putExtra("cmd",cmd);
+
+                returnIntent.putExtra("id", getIntent().getIntExtra("id", 0));
+
                 setResult(Activity.RESULT_OK,returnIntent);
                 finish();
 
