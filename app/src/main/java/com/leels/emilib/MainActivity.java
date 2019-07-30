@@ -23,13 +23,13 @@ public class MainActivity extends AppCompatActivity {
         if (msgMap == null) {
             msgMap = new HashMap<Integer, EmiMsg>();
             msgMap.put(R.id.button1, new EmiMsg("192.168.1.250", 1, 1, null, 0));
-            msgMap.put(R.id.button2, new EmiMsg("192.168.1.250", 1, 2, null, 0));
+            msgMap.put(R.id.button2, new EmiMsg("192.168.1.250", 1, 1, null, 0x00000100));
 
             msgMap.put(R.id.button3, new EmiMsg("192.168.1.251", 1, 1, null, 0));
-            msgMap.put(R.id.button4, new EmiMsg("192.168.1.251", 1, 2, null, 0));
+            msgMap.put(R.id.button4, new EmiMsg("192.168.1.251", 1, 1, null, 0x00000100));
 
             msgMap.put(R.id.button5, new EmiMsg("192.168.1.252", 1, 1, null, 0));
-            msgMap.put(R.id.button6, new EmiMsg("192.168.1.252", 1, 2, null, 0));
+            msgMap.put(R.id.button6, new EmiMsg("192.168.1.252", 1, 1, null, 0x00000100));
         }
 
         for(HashMap.Entry<Integer, EmiMsg> entry: msgMap.entrySet()) {
@@ -73,11 +73,13 @@ public class MainActivity extends AppCompatActivity {
                 int msgnum = Integer.parseInt(data.getStringExtra("msg"));
                 int cmd = Integer.parseInt(data.getStringExtra("cmd"));
 
-                EmiMsg msg = new EmiMsg(addr, msgnum, cmd, null, 0);
+                int flag = data.getStringExtra("check").equals("true") ? 0x00000100 : 0;
+
+                EmiMsg msg = new EmiMsg(addr, msgnum, cmd, null, flag);
                 int id = data.getIntExtra("id", 0);
 
                 Log.d(TAG, "onActivityResult: "+Integer.toString(id));
-                Log.d(TAG, "MSG save: "+msg.addr + ": " +Integer.toString(msg.msg) + ": "+Integer.toString(msg.cmd));
+                Log.d(TAG, "MSG save: "+msg.addr + ": " +Integer.toString(msg.msg) + ": "+Integer.toString(msg.cmd) +": " + Integer.toString(msg.flag));
 
                 msgMap.put(id, msg);
 

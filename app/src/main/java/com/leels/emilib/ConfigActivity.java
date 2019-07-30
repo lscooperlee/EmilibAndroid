@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class ConfigActivity extends AppCompatActivity {
@@ -24,10 +25,13 @@ public class ConfigActivity extends AppCompatActivity {
                 String msg = ((EditText) findViewById(R.id.editTextMsg)).getText().toString();
                 String cmd = ((EditText) findViewById(R.id.editTextCmd)).getText().toString();
 
+                boolean checked = ((CheckBox)findViewById(R.id.checkBoxBlock)).isChecked();
+
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("addr",addr);
                 returnIntent.putExtra("msg",msg);
                 returnIntent.putExtra("cmd",cmd);
+                returnIntent.putExtra("check", checked ? "true" : "false");
 
                 returnIntent.putExtra("id", getIntent().getIntExtra("id", 0));
 

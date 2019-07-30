@@ -22,12 +22,12 @@ public class EmiMsg {
     }
 
     public int send() {
-        return sendmsg(addr, msg, cmd);
+        return sendmsg(addr, msg, cmd, flag);
     }
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    public native int sendmsg(String ip, int id, int cmd);
+    public native int sendmsg(String ip, int id, int cmd, int flag);
 }
